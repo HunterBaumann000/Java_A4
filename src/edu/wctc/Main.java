@@ -1,16 +1,11 @@
 package edu.wctc;
-
-import jdk.internal.module.ModuleInfoExtender;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.channels.WritePendingException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
 
-        private static Scanner keyboard;
-        private static PaintCalculator paintCalculator;
+        private static Scanner keyboard = new Scanner(System.in);
+        private static PaintCalculator paintCalculator = new PaintCalculator();
 
         private static void printMenu() {
             System.out.println("1.) Add room");
@@ -50,42 +45,41 @@ public class Main {
 
         private static void readFile() {
             try {
-                File file = new File("Rooms.txt");
-                Scanner fileReader = new Scanner(file);
+                FileInputStream fis = new FileInputStream("Rooms.txt");
+                ObjectInputStream ois = new ObjectInputStream(fis);
 
-                while (fileReader.hasNextLine()) {
-                    String oneRoom = fileReader.nextLine();
-                    System.out.println(oneRoom);
-                }
-            } catch (FileNotFoundException e) {
-                System.out.println("File Doesnt Exist");
+                paintCalculator = (PaintCalculator) ois.readObject();
+                ois.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
+
         }
 
         private static void writeFile() {
             try {
-                File file = new File("Rooms.txt");
+                FileOutputStream fos = new FileOutputStream("Rooms.txt");
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
 
-                file.write(paintCalculator.toString());
-
-            } catch (WritePendingException | FileNotFoundException e) {
-                System.out.println("File could not be written to");
+                oos.writeObject(paintCalculator);
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
         public static void main(String[]args)  {
+            printMenu();
+            int userInput = keyboard.nextInt();
 
             while(userInput != 5) {
-                printMenu();
-                int userInput = keyboard.nextInt();
-
                 if (userInput == 1)
                 {
                     createRoom();
                 }
                 else if (userInput == 2)
                 {
-                    System.out.println(paintCalculator.getClass(roomList));
+                    System.out.println(paintCalculator.toString());
                 }
                 else if (userInput == 3)
                 {
@@ -95,7 +89,9 @@ public class Main {
                 {
                     writeFile();
                 }
-            } fileReader.close();
+                printMenu();
+                userInput = keyboard.nextInt();
+            }
             System.out.println("Program Ended");
         }
 }

@@ -1,8 +1,8 @@
 package edu.wctc;
-
+import java.io.Serializable;
 import java.util.*;
 
-public class Room {
+public class Room implements Serializable {
 
     private List<Wall> wallList = new ArrayList<>();
 
@@ -29,7 +29,7 @@ public class Room {
     public double getArea() {
         double area = 0;
         for (Wall wall : wallList) {
-            area =+ Wall.getArea();
+            area +=  wall.getArea();
         }
 
         return area;

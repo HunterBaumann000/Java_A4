@@ -1,6 +1,7 @@
 package edu.wctc;
+import java.io.Serializable;
 
-public class Wall {
+public class Wall implements Serializable {
 
     private double width;
     private double height;
@@ -11,7 +12,7 @@ public class Wall {
     }
 
     public double getWidth() {
-        return  width;
+        return width;
     }
 
     public double getHeight() {
